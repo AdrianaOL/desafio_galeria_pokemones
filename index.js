@@ -1,9 +1,9 @@
 const http = require('http')
 const fs = require('fs')
-const pokemonesDetalles = require ('./getdata.js')
+const pokemonesDetalles = require ('./getdata')
 http
   .createServer((req, res) => {
-    if (req.url == '/') {
+    if (req.url === '/') {
       res.writeHead(200, { 'Content-Type': 'text/html' })
       fs.readFile('index.html', 'utf8', (err, html) => {
         res.end(html)

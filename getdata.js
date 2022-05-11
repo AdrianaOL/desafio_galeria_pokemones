@@ -1,27 +1,25 @@
 const axios = require('axios')
-const pokemonesPromesas = []
+const pokemones = []
 const pokemonesDetalles = []
 
-async function pokemonesGet() {
-  const { data } = await axios.get(
-    'https://pokeapi.co/api/v2/pokemon?limit=150'
-  )
+const pokemonesGet = async () => {
+  const { data } = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=150')
   return data.results
 }
-async function getFullData(name) {
+const getFullData = async(name) => {
   const { data } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`)
   return data
 }
 pokemonesGet().then((results) => {
   results.forEach((p) => {
-    let pokemonName = p.name
-    pokemonesPromesas.push(getFullData(pokemonName))
+    const { name } = p
+    pokemones.push(getFullData(name))
   })
-  Promise.all(pokemonesPromesas).then((data) => {
+  Promise.all(pokemones).then((data) => {
     data.forEach((p) => {
-      const img = p.sprites.front_default
-      const nombre = p.nombre
-      pokemonesDetalles.push({ img, nombre })
+      const imagen = p.sprites.front_default
+      const nombre = p.name
+      pokemonesDetalles.push({ imagen, nombre })
     })
   })
 })
