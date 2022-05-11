@@ -1,6 +1,15 @@
 const http = require('http')
 const fs = require('fs')
-const pokemonesDetalles = require('./getdata')
+const axios = require('axios')
+
+const pokemonesGet = async () => {
+  const { data } = await axios.get(`https://pokeapi.co/api/v2/pokemon/?limit=150`)
+  return data.results
+}
+const getFullData = async(url) => {
+  const { data } = await axios.get(url)
+  return data
+}
 http
   .createServer((req, res) => {
     if (req.url === '/') {
@@ -10,9 +19,25 @@ http
       })
     }
     if (req.url == '/pokemones') {
-			res.writeHead(200, { 'Content-Type': 'application/json' })
-			res.write(JSON.stringify(pokemonesDetalles))
-			res.end()
-		}
+      const pokemones = []
+      const pokemonesDetalles = []
+      res.writeHead(200, { 'Content-Type': 'application/json' })
+      //
+      pokemonesGet().then((results) => {
+        results.forEach((p) => {
+          pokemones.push(getFullData(p.url))
+        })
+        Promise.all(pokemones).then((data) => {
+          data.forEach((p) => {
+            const img = p.sprites.front_default
+            const nombre = p.name
+            pokemonesDetalles.push({ img, nombre })
+          })
+          //
+          res.write(JSON.stringify(pokemonesDetalles))
+          res.end()
+        })
+      })
+    }
   })
   .listen(3000, () => console.log('Servidor encendido'))
