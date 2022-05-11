@@ -3,7 +3,7 @@ const pokemones = []
 const pokemonesDetalles = []
 
 const pokemonesGet = async () => {
-  const { data } = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=150')
+  const { data } = await axios.get(`https://pokeapi.co/api/v2/pokemon/?limit=15`)
   return data.results
 }
 const getFullData = async(name) => {
@@ -16,11 +16,11 @@ pokemonesGet().then((results) => {
     pokemones.push(getFullData(name))
   })
   Promise.all(pokemones).then((data) => {
-    data.forEach((p) => {
-      const imagen = p.sprites.front_default
-      const nombre = p.name
-      pokemonesDetalles.push({ imagen, nombre })
-    })
-  })
+		data.forEach((p) => {
+			const img = p.sprites.front_default
+			const nombre = p.name
+			pokemonesDetalles.push({ img, nombre })
+		})
+	})
 })
 module.exports = pokemonesDetalles

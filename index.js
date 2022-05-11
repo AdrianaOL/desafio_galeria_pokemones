@@ -1,6 +1,6 @@
 const http = require('http')
 const fs = require('fs')
-const pokemonesDetalles = require ('./getdata')
+const pokemonesDetalles = require('./getdata')
 http
   .createServer((req, res) => {
     if (req.url === '/') {
@@ -10,9 +10,9 @@ http
       })
     }
     if (req.url == '/pokemones') {
-        res.writeHead(200, { 'Content-Type': 'application/json' })
-        res.write(JSON.stringify(pokemonesDetalles))
-        res.end()
-      }
+			res.writeHead(200, { 'Content-Type': 'application/json' })
+			res.write(JSON.stringify(pokemonesDetalles))
+			res.end()
+		}
   })
   .listen(3000, () => console.log('Servidor encendido'))
